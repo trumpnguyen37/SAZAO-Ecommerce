@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Mail\VerifyEmailUser;
+use Illuminate\Support\Facades\Mail;
 
 class RegisteredUserController extends Controller
 {
@@ -35,17 +37,37 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-
+    
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'status' => 'inactive'
         ]);
-
+    
         event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+    
+        $link = route('verifyUserEmail', ['id' => $user->id]);
+    
+        try {
+            Mail::send(
+                'mail.verify-email-user',
+                compact('link'),
+                function ($message) use ($user) {
+                    $message->to($user->email)->subject('Verify Your Email Address');
+                }
+            );
+    
+            toastr('Register successfully! Check your email address');
+        } catch (\Exception $e) {
+            \Log::error('Mail sending failed: '.$e->getMessage());
+            // Handle the error appropriately
+        }
+    
+        return redirect()->route('login');
+    }
+    
+    public function verifyUserEmail(Request $rq){
+        dd($rq->all());
     }
 }
