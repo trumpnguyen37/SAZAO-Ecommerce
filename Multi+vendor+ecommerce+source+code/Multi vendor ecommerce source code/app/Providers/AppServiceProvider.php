@@ -36,11 +36,11 @@ class AppServiceProvider extends ServiceProvider
         Config::set('app.timezone', $generalSetting->time_zone);
 
         /** Set Mail Config */
-        Config::set('mail.mailers.smtp.host', $mailSetting->host);
-        Config::set('mail.mailers.smtp.port', $mailSetting->port);
-        Config::set('mail.mailers.smtp.encryption', $mailSetting->encryption);
-        Config::set('mail.mailers.smtp.username', $mailSetting->username);
-        Config::set('mail.mailers.smtp.password', $mailSetting->password);
+        // Config::set('mail.mailers.smtp.host', $mailSetting->host);
+        // Config::set('mail.mailers.smtp.port', $mailSetting->port);
+        // Config::set('mail.mailers.smtp.encryption', $mailSetting->encryption);
+        // Config::set('mail.mailers.smtp.username', $mailSetting->username);
+        // Config::set('mail.mailers.smtp.password', $mailSetting->password);
 
         /** Set Broadcasting Config */
         Config::set('broadcasting.connections.pusher.key', $pusherSetting->pusher_key);

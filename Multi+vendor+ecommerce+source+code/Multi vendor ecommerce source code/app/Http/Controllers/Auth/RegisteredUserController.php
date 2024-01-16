@@ -68,6 +68,18 @@ class RegisteredUserController extends Controller
     }
     
     public function verifyUserEmail(Request $rq){
-        dd($rq->all());
+       try{
+        $user = User::find($rq->get('id'));
+        $user->status = 'active';
+        $user->save();
+        toastr('Register successfully! Check your email address');
+       }catch (\Exception $e){
+        toastr('Error!');
+
+       }
+       return redirect()->route('login');
+
+
+
     }
 }
